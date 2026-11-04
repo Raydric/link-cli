@@ -164,6 +164,7 @@ export const CheckoutComplete: React.FC<CheckoutCompleteProps> = ({
             </Text>
           )}
         </Box>
+        {checkout && <CheckoutSummary checkout={checkout} />}
       </Box>
     );
   }
@@ -195,6 +196,7 @@ export const CheckoutComplete: React.FC<CheckoutCompleteProps> = ({
             </Text>
           )}
         </Box>
+        {checkout && <CheckoutSummary checkout={checkout} />}
       </Box>
     );
   }
@@ -230,6 +232,7 @@ export const CheckoutComplete: React.FC<CheckoutCompleteProps> = ({
       <Box flexDirection="column">
         <Text color="red">✗ Failed to complete checkout</Text>
         <Text color="red">{error}</Text>
+        {checkout && <CheckoutSummary checkout={checkout} />}
       </Box>
     );
   }
