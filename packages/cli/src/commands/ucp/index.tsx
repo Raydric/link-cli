@@ -27,7 +27,10 @@ import {
   CheckoutRetrieve,
   type CheckoutRetrieveResult,
 } from './checkout-retrieve';
-import { runUcpCheckoutRetrieve } from './checkout-state';
+import {
+  runUcpCheckoutRetrieve,
+  type UcpCheckoutWaitResult,
+} from './checkout-state';
 import {
   catalogSearchOptions,
   checkoutCancelOptions,
@@ -249,18 +252,21 @@ export function createUcpCli(
 
       if (!c.agent && !c.formatExplicit) {
         let capturedResult: UcpCheckout | null = null;
+        let capturedOutcome: UcpCheckoutWaitResult['outcome'] | undefined;
         return renderInteractive(
           <CheckoutComplete
             repository={repository}
             id={id}
             params={params}
-            onComplete={(result) => {
+            onComplete={(result, outcome) => {
               capturedResult = result;
+              capturedOutcome = outcome;
             }}
           />,
           () => {
-            if (!capturedResult)
+            if (!capturedOutcome)
               throw new Error('Component exited without producing a result');
+            if (capturedOutcome !== 'success') process.exitCode = 1;
             return capturedResult;
           },
         );
@@ -356,6 +362,11 @@ export function createUcpCli(
           />,
           () => {
             if (!capturedResult) throw new Error('Failed to retrieve checkout');
+            if (
+              c.options.poll &&
+              (capturedResult as UcpCheckoutWaitResult).outcome !== 'success'
+            )
+              process.exitCode = 1;
             return capturedResult;
           },
         );

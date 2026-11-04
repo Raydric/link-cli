@@ -761,7 +761,7 @@ All UCP commands show an interactive summary when run in a terminal without a fo
 
 Interactive `checkout complete` also waits for the checkout and payment outcome. With `--format json`, completion returns its response immediately; use `checkout retrieve --poll --format json` to follow payment progress. Interactive retrieval with `--poll` shows progress, required actions, and the final outcome.
 
-Checkout summaries show buyer details, UCP messages (including error codes, severity, field paths, and recovery URLs), and selected fulfillment destinations and options. Available fulfillment choices remain in JSON output. Missing buyer details, destinations, or shipping selections are shown explicitly.
+Checkout summaries show buyer details, UCP messages (including error codes, severity, field paths, and recovery URLs), and selected fulfillment destinations and options. Available fulfillment choices remain in JSON output. Missing buyer details, destinations, or shipping selections are shown explicitly. Interactive completion checks the initial response for checkout errors before polling and preserves those messages. Completion and retrieval polling stop when checkout errors or required buyer intervention are returned; warnings and informational messages do not stop an otherwise processing checkout. Interactive failures and unresolved actions exit with a nonzero status.
 
 Search a catalog, then use the returned business and SKU to create a UCP checkout:
 
